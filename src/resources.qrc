@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/magic6ball">
+        <file>qml/qmldir</file>
+        <file>qml/Main.qml</file>
+        <file>qml/IntroPage.qml</file>
+        <file>qml/MainPage.qml</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file alias="arrow.svg">../dist/arrow.svg</file>
+        <file alias="logo.svg">../dist/logo.svg</file>
+        <file alias="user.svg">../dist/user.svg</file>
+        <file alias="8ball.svg">../dist/8ball.svg</file>
+        <file alias="tail.svg">../dist/tail.svg</file>
+        <file alias="tail_8ball.svg">../dist/tail_8ball.svg</file>
+    </qresource>
+    <qresource prefix="/data">
+        <file alias="answers.txt">../dist/answers.txt</file>
+    </qresource>
+</RCC>
