@@ -9,3 +9,7 @@ Use `QT_FONT_DPI` to scale the UI, for example `QT_FONT_DPI=150 ./app_magic6ball
 - `!add` to append a new answer to the local `answers.txt`
 - `Up` to move the cursor to position 0 if there's text or edit the previous message if there isn't
 - `Down` to move the cursor at the end
+
+## Screenshots
+![image](https://github.com/user-attachments/assets/e62ca89a-b0e1-4b57-97b2-22992cf2dbfa)
+![image](https://github.com/user-attachments/assets/f9e5c688-e0c2-4493-9778-6d5695716fd9)
