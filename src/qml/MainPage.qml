@@ -147,6 +147,7 @@ Item {
                     placeholderText: "Ask the magic ball!"
                     placeholderTextColor: "#9b9b9b"
                     color: "#ececec"
+                    font.pixelSize: 15
                     focus: true
                     background: Rectangle {
                         color: "#303030"
@@ -190,9 +191,10 @@ Item {
                 }
 
                 Image {
-                    source: "qrc:/icons/arrow.svg"
+                    source: editMode ? "qrc:/icons/pencil.svg" : "qrc:/icons/arrow.svg"
                     opacity: inputField.text.trim() === "" ? 0.5 : 1.0
                     mipmap: true
+                    anchors.verticalCenter: parent.verticalCenter
                     MouseArea {
                         anchors.fill: parent
                         onClicked: sendMessage()

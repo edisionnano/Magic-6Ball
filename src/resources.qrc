@@ -7,6 +7,7 @@
     </qresource>
     <qresource prefix="/icons">
         <file alias="arrow.svg">../dist/arrow.svg</file>
+        <file alias="pencil.svg">../dist/pencil.svg</file>
         <file alias="logo.svg">../dist/logo.svg</file>
         <file alias="user.svg">../dist/user.svg</file>
         <file alias="8ball.svg">../dist/8ball.svg</file>

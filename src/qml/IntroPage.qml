@@ -69,6 +69,7 @@ Item {
                         placeholderText: "Ask the magic ball!"
                         placeholderTextColor: "#9b9b9b"
                         color: "#ececec"
+                        font.pixelSize: 15
                         focus: true
                         background: Rectangle {
                             color: "#303030"
@@ -80,13 +81,14 @@ Item {
                         Component.onCompleted: {
                             Qt.callLater(() => inputField.forceActiveFocus());
                         }
+                        Keys.onReturnPressed: function(event) {
+                            if (inputField.text.trim() !== "") {
+                                let newChatId = chatDb.createNewChat();
+                                stackView.push(mainPageComponent, { firstMessage: inputField.text.trim(), chatId: newChatId });
+                            }
+                        }
                         Keys.onPressed: function(event) {
-                            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                                if (inputField.text.trim() !== "") {
-                                    let newChatId = chatDb.createNewChat();
-                                    stackView.push(mainPageComponent, { firstMessage: inputField.text.trim(), chatId: newChatId });
-                                }
-                            } else if (event.key === Qt.Key_Up) {
+                            if (event.key === Qt.Key_Up) {
                                 inputField.cursorPosition = 0;
                             }
                             else if (event.key === Qt.Key_Down) {
@@ -99,9 +101,13 @@ Item {
                         source: "qrc:/icons/arrow.svg"
                         opacity: inputField.text.trim() === "" ? 0.5 : 1.0
                         mipmap: true
+                        anchors.verticalCenter: parent.verticalCenter
                         MouseArea {
                             anchors.fill: parent
-                            onClicked: stackView.push(mainPageComponent, { firstMessage: inputField.text.trim() });
+                            onClicked: if (inputField.text.trim() !== "") {
+                                let newChatId = chatDb.createNewChat();
+                                stackView.push(mainPageComponent, { firstMessage: inputField.text.trim() });
+                            }
                             cursorShape: inputField.text.trim() === "" ? Qt.ArrowCursor : Qt.PointingHandCursor
                         }
                     }
@@ -112,7 +118,7 @@ Item {
                 width: parent.width
                 spacing: 10
                 visible: randomMessages.length > 0
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
                 Layout.fillWidth: true
 
                 Text {
