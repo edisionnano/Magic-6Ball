@@ -106,7 +106,7 @@ Item {
                             anchors.fill: parent
                             onClicked: if (inputField.text.trim() !== "") {
                                 let newChatId = chatDb.createNewChat();
-                                stackView.push(mainPageComponent, { firstMessage: inputField.text.trim() });
+                                stackView.push(mainPageComponent, { firstMessage: inputField.text.trim(), chatId: newChatId });
                             }
                             cursorShape: inputField.text.trim() === "" ? Qt.ArrowCursor : Qt.PointingHandCursor
                         }
