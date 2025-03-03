@@ -71,10 +71,23 @@ Item {
                         color: model.sender === "user" ? "#ececec" : (model.thinking ? "transparent" : "#303030")
                         anchors.margins: 10
                         opacity: model.thinking ? 0.6 : 1.0
-                        topLeftRadius: model.sender === "8ball" ? 0 : 15
-                        topRightRadius: model.sender === "user" ? 0 : 15
-                        bottomLeftRadius: 15
-                        bottomRightRadius: 15
+                        radius: 15
+
+                        Rectangle {
+                            width: 15; height: 15
+                            color: parent.color
+                            visible: model.sender === "8ball"
+                            anchors.top: parent.top
+                            anchors.left: parent.left
+                        }
+
+                        Rectangle {
+                            width: 15; height: 15
+                            color: parent.color
+                            visible: model.sender === "user"
+                            anchors.top: parent.top
+                            anchors.right: parent.right
+                        }
 
                         Image {
                             id: profilePicture
@@ -163,10 +176,10 @@ Item {
                     Keys.onReturnPressed: sendMessage()
                     Keys.onPressed: function(event) {
                         var keyEvent = event;
-                        if (keyEvent.modifiers & Qt.ControlModifier && keyEvent.modifiers & Qt.ShiftModifier && keyEvent.key === Qt.Key_R) {
+                        if (keyEvent.modifiers & Qt.ControlModifier && keyEvent.modifiers & Qt.ShiftModifier && keyEvent.nativeScanCode === 27) { // R
                             clearChat();
                         }
-                        else if (keyEvent.modifiers & Qt.ControlModifier && keyEvent.modifiers & Qt.ShiftModifier && keyEvent.key === Qt.Key_N) {
+                        else if (keyEvent.modifiers & Qt.ControlModifier && keyEvent.modifiers & Qt.ShiftModifier && keyEvent.nativeScanCode === 57) { // N
                             startNewChat();
                         }
                         else if (keyEvent.key === Qt.Key_Up) {
@@ -217,29 +230,35 @@ Item {
     }
 
     function sendMessage() {
-        let trimmedText = inputField.text.trim();
-        if (trimmedText === "") return;
-        else if (trimmedText === "!clear") {
-            clearChat();
-        }
-        else if (trimmedText === "!new") {
-            startNewChat();
-        }
-        else if (trimmedText.startsWith("!add ")) {
-            let newAnswer = trimmedText.substring(5);
-            answerProvider.addAnswer(newAnswer);
-            chatModel.append({ sender: "8ball", message: "Answer added: " + newAnswer });
-        }
-        else {
-            if (lastUserMessage !== "" && editMode) {
-                chatModel.remove(chatModel.count - 1);
-                chatModel.remove(chatModel.count - 1);
+        let messages = inputField.text.split('\n');
+        if (!Array.isArray(messages) || messages.length === 0) return;
+
+        messages.forEach(trimmedText => {
+            trimmedText = trimmedText.trim();
+            if (trimmedText === "") return;
+            else if (trimmedText === "!clear") {
+                clearChat();
             }
-            chatDb.saveMessage(chatId, "user", trimmedText);
-            chatModel.append({ sender: "user", message: trimmedText });
-            lastUserMessage = trimmedText;
-            showThinking();
-        }
+            else if (trimmedText === "!new") {
+                startNewChat();
+            }
+            else if (trimmedText.startsWith("!add ")) {
+                let newAnswer = trimmedText.substring(5);
+                answerProvider.addAnswer(newAnswer);
+                chatModel.append({ sender: "8ball", message: "Answer added: " + newAnswer });
+            }
+            else {
+                if (lastUserMessage !== "" && editMode) {
+                    chatModel.remove(chatModel.count - 1);
+                    chatModel.remove(chatModel.count - 1);
+                }
+                chatDb.saveMessage(chatId, "user", trimmedText);
+                chatModel.append({ sender: "user", message: trimmedText });
+                lastUserMessage = trimmedText;
+                showThinking();
+            }
+        });
+
         inputField.text = "";
     }
 
@@ -310,5 +329,6 @@ Item {
             chatModel.set(chatModel.count - 1, { sender: "8ball", message: currentAnswer, thinking: false });
             inputField.enabled = true;
         }
+        Qt.callLater(() => chatView.positionViewAtEnd());
     }
 }
